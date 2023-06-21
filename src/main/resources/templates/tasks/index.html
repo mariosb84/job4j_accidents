@@ -23,6 +23,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Text</th>
                 <th scope="col">Address</th>
+                <th scope="col">Edit</th>
             </tr>
             </thead>
             <tbody>
@@ -31,6 +32,15 @@
                 <td th:text="${accident.name}"></td>
                 <td th:text="${accident.text}"></td>
                 <td th:text="${accident.address}"></td>
+                <td class="mb-3 row">
+                    <div class="col-8">
+                        <div class="col-8"></div>
+                        <div class="row">
+                            <div class="col-4"><a class="btn btn btn-success w-100" th:href="@{/tasks/editAccident/{id}(id=${accident.id})}">Отредактировать</a>
+                            </div>
+                        </div>
+                    </div>
+                    </td>
             </tr>
             </tbody>
         </table>
@@ -48,6 +58,15 @@
             </div>
         </div>
     </nav>
+    <div class="mb-3 row">
+        <div class="col-8">
+            <div class="col-8"></div>
+            <div class="row">
+                <div class="col-4"><a class="btn btn btn-success w-100" th:href="@{/tasks/createAccident}">Добавить инцидент</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

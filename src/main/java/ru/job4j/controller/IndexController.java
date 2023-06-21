@@ -1,5 +1,6 @@
 package ru.job4j.controller;
 
+import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,14 +10,11 @@ import ru.job4j.service.AccidentService;
 
 @ThreadSafe
 @Controller
+@AllArgsConstructor
 @RequestMapping("/tasks")
 public class IndexController {
 
     private final AccidentService accidentService;
-
-    public IndexController(AccidentService accidentService) {
-        this.accidentService = accidentService;
-    }
 
     @GetMapping("/index")
     public String index(Model model) {
