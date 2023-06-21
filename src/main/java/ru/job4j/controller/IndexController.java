@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.job4j.model.Accident;
 import ru.job4j.service.AccidentService;
 
 @ThreadSafe
@@ -21,9 +20,6 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index(Model model) {
-        accidentService.add(new Accident());
-        accidentService.add(new Accident());
-        accidentService.add(new Accident());
         model.addAttribute("user", "Petr Arsentev");
         model.addAttribute("accidents", accidentService.findAll());
         return "/tasks/index";

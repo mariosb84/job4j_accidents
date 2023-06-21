@@ -1,18 +1,23 @@
 package ru.job4j.repository;
 
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.model.Accident;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-@AllArgsConstructor
 public class AccidentMemSpr implements AccidentMem {
 
-    private final ConcurrentHashMap<Integer, Accident> accidents;
+    private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
+
+    private AccidentMemSpr() {
+        add(new Accident());
+        add(new Accident());
+        add(new Accident());
+    }
 
     @Override
     public List<Accident> findAll() {
@@ -26,8 +31,7 @@ public class AccidentMemSpr implements AccidentMem {
 
     @Override
     public boolean update(Accident accident, int id) {
-         accidents.replace(id, accident);
-         return true;
+        return (accidents.computeIfPresent(id, (k, v) -> v = accident)) != null;
     }
 
     @Override
@@ -46,8 +50,7 @@ public class AccidentMemSpr implements AccidentMem {
 
     @Override
     public boolean delete(int id) {
-        accidents.remove(id);
-        return true;
+        return accidents.remove(id, accidents.get(id));
     }
 
 }
