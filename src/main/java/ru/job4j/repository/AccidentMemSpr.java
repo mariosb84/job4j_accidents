@@ -18,8 +18,8 @@ public class AccidentMemSpr implements AccidentMem {
 
     private AccidentMemSpr() {
         add(new Accident(1, "One", "TextOne", "AddressOne"));
-        add(new Accident(1, "Two", "TextTwo", "AddressTwo"));
-        add(new Accident(1, "Three", "TextThree", "AddressThree"));
+        add(new Accident(2, "Two", "TextTwo", "AddressTwo"));
+        add(new Accident(3, "Three", "TextThree", "AddressThree"));
     }
 
     @Override

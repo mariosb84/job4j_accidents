@@ -30,7 +30,13 @@ public class AccidentController {
 
     @GetMapping("/editAccident")
     public String viewEditAccident(Model model, @PathVariable int id) {
-        return findById(model, id, "/tasks/editAccident");
+        var accidentOptional = accidents.findById(id);
+        if (accidentOptional.isEmpty()) {
+            model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
+            return "errors/error404";
+        }
+        model.addAttribute("accident", accidentOptional.get());
+        return "/tasks/editAccident";
     }
 
     @PostMapping("/updateAccident")
@@ -41,16 +47,6 @@ public class AccidentController {
             return "errors/error404";
         }
         return "redirect:/index";
-    }
-
-    private  String findById(Model model, @PathVariable int id, String out) {
-        var accidentOptional = accidents.findById(id);
-        if (accidentOptional.isEmpty()) {
-            model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
-            return "errors/error404";
-        }
-        model.addAttribute("accident", accidentOptional.get());
-        return out;
     }
 
 }
