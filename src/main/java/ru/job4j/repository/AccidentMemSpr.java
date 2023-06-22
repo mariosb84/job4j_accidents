@@ -7,16 +7,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
 public class AccidentMemSpr implements AccidentMem {
 
+    private final AtomicInteger id = new AtomicInteger();
+
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
     private AccidentMemSpr() {
-        add(new Accident());
-        add(new Accident());
-        add(new Accident());
+        add(new Accident(1, "One", "TextOne", "AddressOne"));
+        add(new Accident(1, "Two", "TextTwo", "AddressTwo"));
+        add(new Accident(1, "Three", "TextThree", "AddressThree"));
     }
 
     @Override
@@ -26,6 +29,7 @@ public class AccidentMemSpr implements AccidentMem {
 
     @Override
     public Accident add(Accident accident) {
+        accident.setId(id.incrementAndGet());
         return accidents.put(accident.getId(), accident);
     }
 
