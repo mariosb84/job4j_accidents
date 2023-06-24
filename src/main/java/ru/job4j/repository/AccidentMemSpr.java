@@ -40,11 +40,11 @@ public class AccidentMemSpr implements AccidentMem {
     @Override
     public boolean update(Accident accident, int id) {
         return accidents.computeIfPresent(id, (k, v) -> new Accident(
-                v.getId(),
-                v.getName(),
-                v.getText(),
-                v.getAddress(),
-                v.getType()
+                accident.getId(),
+                accident.getName(),
+                accident.getText(),
+                accident.getAddress(),
+                accident.getType()
         )) != null;
     }
 
