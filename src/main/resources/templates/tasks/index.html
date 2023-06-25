@@ -38,7 +38,7 @@
                     <div class="col-8">
                         <div class="col-8"></div>
                         <div class="row">
-                            <div class="col-4"><a class="btn btn btn-success w-100" th:href="@{/tasks/editAccident/{id}(id=${accident.id})}">Отредактировать</a>
+                            <div class="col-16"><a class="btn btn btn-success w-100" th:href="@{/tasks/editAccident/{id}(id=${accident.id})}">Отредактировать</a>
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,11 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link active" href="#">Главная <span class="sr-only">(current)</span></a>
-                <div th:text="${user}"></div>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup2">
+            <div class="navbar-nav">
+                   <span> Пользователь :  </span>  <span th:text="${user}"></span>
             </div>
         </div>
     </nav>

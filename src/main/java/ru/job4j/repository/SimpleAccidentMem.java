@@ -11,13 +11,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
-public class AccidentMemSpr implements AccidentMem {
+public class SimpleAccidentMem implements AccidentMem {
 
     private final AtomicInteger id = new AtomicInteger();
 
     private final Map<Integer, Accident> accidents = new ConcurrentHashMap<>();
 
-    private AccidentMemSpr() {
+    private SimpleAccidentMem() {
         add(new Accident(1, "One", "TextOne", "AddressOne",
                 new AccidentType(1, "Две машины")));
         add(new Accident(2, "Two", "TextTwo", "AddressTwo",

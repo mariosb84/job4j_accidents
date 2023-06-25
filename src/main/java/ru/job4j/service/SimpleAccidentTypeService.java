@@ -10,11 +10,11 @@ import java.util.Optional;
 
 @ThreadSafe
 @Service
-public class AccidentTypeServiceSpr implements AccidentTypeService {
+public class SimpleAccidentTypeService implements AccidentTypeService {
 
     private final AccidentTypeMem store;
 
-    public AccidentTypeServiceSpr(AccidentTypeMem store) {
+    public SimpleAccidentTypeService(AccidentTypeMem store) {
         this.store = store;
     }
 

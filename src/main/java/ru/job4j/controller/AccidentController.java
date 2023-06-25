@@ -28,10 +28,10 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident) {
         accidents.add(accident);
-        return "redirect:/index";
+        return "redirect:/tasks/index";
     }
 
-    @GetMapping("/editAccident")
+    @GetMapping("/editAccident/{id}")
     public String viewEditAccident(Model model, @PathVariable int id) {
         var accidentOptional = accidents.findById(id);
         if (accidentOptional.isEmpty()) {
@@ -49,7 +49,7 @@ public class AccidentController {
             model.addAttribute("message", "Задание с указанным идентификатором не найдено");
             return "errors/error404";
         }
-        return "redirect:/index";
+        return "redirect:/tasks/index";
     }
 
 }
