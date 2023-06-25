@@ -27,12 +27,14 @@ public class AccidentController {
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident) {
+        accident.setType(accidentTypes.findById(accident.getType().getId()).get());
         accidents.add(accident);
         return "redirect:/tasks/index";
     }
 
     @GetMapping("/editAccident/{id}")
     public String viewEditAccident(Model model, @PathVariable int id) {
+        model.addAttribute("types", accidentTypes.findAll());
         var accidentOptional = accidents.findById(id);
         if (accidentOptional.isEmpty()) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
@@ -44,6 +46,7 @@ public class AccidentController {
 
     @PostMapping("/updateAccident")
     public String update(Model model, @ModelAttribute Accident accident) {
+        accident.setType(accidentTypes.findById(accident.getType().getId()).get());
         var isUpdate = accidents.update(accident, accident.getId());
         if (!isUpdate) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдено");

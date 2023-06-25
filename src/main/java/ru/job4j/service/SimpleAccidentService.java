@@ -4,7 +4,6 @@ import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.model.Accident;
 import ru.job4j.repository.AccidentMem;
-import ru.job4j.repository.AccidentTypeMem;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,11 +14,8 @@ public class SimpleAccidentService implements AccidentService {
 
     private final AccidentMem store;
 
-    private final AccidentTypeMem storeType;
-
-    public SimpleAccidentService(AccidentMem store, AccidentTypeMem storeType) {
+    public SimpleAccidentService(AccidentMem store) {
         this.store = store;
-        this.storeType = storeType;
     }
 
     @Override
@@ -29,13 +25,11 @@ public class SimpleAccidentService implements AccidentService {
 
     @Override
     public Accident add(Accident accident) {
-        accident.setType(storeType.findById(accident.getId()).get());
         return store.add(accident);
     }
 
     @Override
     public boolean update(Accident accident, int id) {
-        accident.setType(storeType.findById(accident.getId()).get());
         return store.update(accident, accident.getId());
     }
 
