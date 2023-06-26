@@ -27,7 +27,6 @@ public class AccidentController {
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident) {
-        accident.setType(accidentTypes.findById(accident.getType().getId()).get());
         accidents.add(accident);
         return "redirect:/tasks/index";
     }
@@ -46,7 +45,6 @@ public class AccidentController {
 
     @PostMapping("/updateAccident")
     public String update(Model model, @ModelAttribute Accident accident) {
-        accident.setType(accidentTypes.findById(accident.getType().getId()).get());
         var isUpdate = accidents.update(accident, accident.getId());
         if (!isUpdate) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдено");
