@@ -52,7 +52,10 @@
                         <select class="form-control" id="type.id"  name="type.id">
                             <option th:each="type: ${types}"
                                     th:text="${type.name}"
-                                    th:value="${type.id}"></option>
+                                    th:value="${type.id}"
+                                    th:field="*{type.id}"
+                                    th:selected="${type.id==type.id}">
+                            </option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
