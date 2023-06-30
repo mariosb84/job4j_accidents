@@ -3,10 +3,9 @@ package ru.job4j.repository;
 import org.springframework.stereotype.Repository;
 import ru.job4j.model.Accident;
 import ru.job4j.model.AccidentType;
+import ru.job4j.model.Rule;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,11 +18,20 @@ public class SimpleAccidentMem implements AccidentMem {
 
     private SimpleAccidentMem() {
         add(new Accident(1, "One", "TextOne", "AddressOne",
-                new AccidentType(1, "Две машины")));
+                new AccidentType(1, "Две машины"),
+                new HashSet<>(Arrays.asList(new Rule(1, "Статья. 1"),
+                                            new Rule(2, "Статья. 2"),
+                                            new Rule(3, "Статья. 3")))));
         add(new Accident(2, "Two", "TextTwo", "AddressTwo",
-                new AccidentType(2, "Машина и человек")));
+                new AccidentType(2, "Машина и человек"),
+                new HashSet<>(Arrays.asList(new Rule(1, "Статья. 1"),
+                        new Rule(2, "Статья. 2"),
+                        new Rule(3, "Статья. 3")))));
         add(new Accident(3, "Three", "TextThree", "AddressThree",
-                new AccidentType(3, "Машина и велосипед")));
+                new AccidentType(3, "Машина и велосипед"),
+                new HashSet<>(Arrays.asList(new Rule(1, "Статья. 1"),
+                        new Rule(2, "Статья. 2"),
+                        new Rule(3, "Статья. 3")))));
     }
 
     @Override
@@ -44,7 +52,8 @@ public class SimpleAccidentMem implements AccidentMem {
                 accident.getName(),
                 accident.getText(),
                 accident.getAddress(),
-                accident.getType()
+                accident.getType(),
+                accident.getRules()
         )) != null;
     }
 

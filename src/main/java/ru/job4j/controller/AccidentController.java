@@ -6,8 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.model.Accident;
+import ru.job4j.service.AccidentRuleService;
 import ru.job4j.service.AccidentService;
 import ru.job4j.service.AccidentTypeService;
+
+import java.util.List;
 
 @ThreadSafe
 @Controller
@@ -17,16 +20,19 @@ public class AccidentController {
 
     private final AccidentService accidents;
     private final AccidentTypeService accidentTypes;
+    private final AccidentRuleService accidentRules;
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {
         model.addAttribute("types", accidentTypes.findAll());
+        model.addAttribute("rules", accidentRules.findAll());
         model.addAttribute("accident", new Accident());
         return "/tasks/createAccident";
     }
 
     @PostMapping("/saveAccident")
-    public String save(@ModelAttribute Accident accident) {
+    public String save(@ModelAttribute Accident accident, @RequestParam("rIds") List<Integer> rulesIds) {
+        accident.setRules(accidentRules.findByAccidentGet(rulesIds));
         accidents.add(accident);
         return "redirect:/tasks/index";
     }
@@ -34,6 +40,7 @@ public class AccidentController {
     @GetMapping("/editAccident/{id}")
     public String viewEditAccident(Model model, @PathVariable int id) {
         model.addAttribute("types", accidentTypes.findAll());
+        model.addAttribute("rules", accidentRules.findAll());
         var accidentOptional = accidents.findById(id);
         if (accidentOptional.isEmpty()) {
             model.addAttribute("message", "Инцидент с указанным идентификатором не найден");
@@ -44,7 +51,8 @@ public class AccidentController {
     }
 
     @PostMapping("/updateAccident")
-    public String update(Model model, @ModelAttribute Accident accident) {
+    public String update(Model model, @ModelAttribute Accident accident, @RequestParam("rIds") List<Integer> rulesIds) {
+        accident.setRules(accidentRules.findByAccidentGet(rulesIds));
         var isUpdate = accidents.update(accident, accident.getId());
         if (!isUpdate) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдено");
