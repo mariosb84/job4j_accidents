@@ -32,8 +32,7 @@ public class AccidentController {
 
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, @RequestParam("rIds") List<Integer> rulesIds) {
-        accident.setRules(accidentRules.findByAccidentGet(rulesIds));
-        accidents.add(accident);
+        accidents.add(accident, rulesIds);
         return "redirect:/tasks/index";
     }
 
@@ -52,8 +51,7 @@ public class AccidentController {
 
     @PostMapping("/updateAccident")
     public String update(Model model, @ModelAttribute Accident accident, @RequestParam("rIds") List<Integer> rulesIds) {
-        accident.setRules(accidentRules.findByAccidentGet(rulesIds));
-        var isUpdate = accidents.update(accident, accident.getId());
+        var isUpdate = accidents.update(accident, accident.getId(), rulesIds);
         if (!isUpdate) {
             model.addAttribute("message", "Задание с указанным идентификатором не найдено");
             return "errors/error404";

@@ -9,9 +9,9 @@ public interface AccidentService {
 
     List<Accident> findAll();
 
-    Accident add(Accident accident);
+    Accident add(Accident accident, List<Integer> rulesIds);
 
-    boolean update(Accident accident, int id);
+    boolean update(Accident accident, int id, List<Integer> rulesIds);
 
     Optional<Accident> findById(int id);
 

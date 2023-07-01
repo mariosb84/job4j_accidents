@@ -32,14 +32,16 @@ public class SimpleAccidentService implements AccidentService {
     }
 
     @Override
-    public Accident add(Accident accident) {
+    public Accident add(Accident accident, List<Integer> rulesIds) {
         accident.setType(accidentTypesStore.findById(accident.getType().getId()).get());
+        accident.setRules(accidentRulesStore.findByAccidentGet(rulesIds));
         return store.add(accident);
     }
 
     @Override
-    public boolean update(Accident accident, int id) {
+    public boolean update(Accident accident, int id, List<Integer> rulesIds) {
         accident.setType(accidentTypesStore.findById(accident.getType().getId()).get());
+        accident.setRules(accidentRulesStore.findByAccidentGet(rulesIds));
         return store.update(accident, accident.getId());
     }
 

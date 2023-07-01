@@ -6,6 +6,7 @@ import ru.job4j.model.Rule;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class SimpleAccidentRulesMem implements AccidentRulesMem {
@@ -60,14 +61,7 @@ public class SimpleAccidentRulesMem implements AccidentRulesMem {
 
     @Override
     public Set<Rule> findByAccidentGet(List<Integer> rulesIds) {
-        HashSet<Rule> result = new HashSet<>();
-        for (Rule rule : accidentsRules.values()) {
-            if (rulesIds.contains(rule.getId())) {
-                result.add(rule);
-            }
-
-        }
-        return result;
+        return rulesIds.stream().map(accidentsRules::get).collect(Collectors.toSet());
     }
 
 }
