@@ -1,5 +1,6 @@
 package ru.job4j.service;
 
+import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.model.AccidentType;
@@ -10,13 +11,10 @@ import java.util.Optional;
 
 @ThreadSafe
 @Service
+@AllArgsConstructor
 public class SimpleAccidentTypeService implements AccidentTypeService {
 
     private final AccidentTypeMem store;
-
-    public SimpleAccidentTypeService(AccidentTypeMem store) {
-        this.store = store;
-    }
 
     @Override
     public List<AccidentType> findAll() {

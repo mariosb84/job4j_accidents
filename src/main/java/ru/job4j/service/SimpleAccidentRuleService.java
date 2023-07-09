@@ -1,5 +1,6 @@
 package ru.job4j.service;
 
+import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.model.Rule;
@@ -11,13 +12,10 @@ import java.util.Set;
 
 @ThreadSafe
 @Service
+@AllArgsConstructor
 public class SimpleAccidentRuleService implements AccidentRuleService {
 
     private final AccidentRulesMem store;
-
-    public SimpleAccidentRuleService(AccidentRulesMem store) {
-        this.store = store;
-    }
 
     @Override
     public List<Rule> findAll() {

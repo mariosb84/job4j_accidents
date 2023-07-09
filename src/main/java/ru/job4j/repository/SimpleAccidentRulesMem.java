@@ -3,12 +3,15 @@ package ru.job4j.repository;
 import org.springframework.stereotype.Repository;
 import ru.job4j.model.Rule;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-@Repository
+/*@Repository*/
 public class SimpleAccidentRulesMem implements AccidentRulesMem {
 
     private final AtomicInteger id = new AtomicInteger();

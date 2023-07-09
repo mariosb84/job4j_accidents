@@ -1,5 +1,6 @@
 package ru.job4j.service;
 
+import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.model.Accident;
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 @ThreadSafe
 @Service
+@AllArgsConstructor
 public class SimpleAccidentService implements AccidentService {
 
     private final AccidentMem store;
@@ -20,11 +22,6 @@ public class SimpleAccidentService implements AccidentService {
 
     private final AccidentRulesMem accidentRulesStore;
 
-    public SimpleAccidentService(AccidentMem store, AccidentTypeMem accidentTypes, AccidentRulesMem accidentRulesStore) {
-        this.store = store;
-        this.accidentTypesStore = accidentTypes;
-        this.accidentRulesStore = accidentRulesStore;
-    }
 
     @Override
     public List<Accident> findAll() {

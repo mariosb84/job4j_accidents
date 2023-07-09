@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Repository
+/*@Repository*/
 public class SimpleAccidentMem implements AccidentMem {
 
     private final AtomicInteger id = new AtomicInteger();
