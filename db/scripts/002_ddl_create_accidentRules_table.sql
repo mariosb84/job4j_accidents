@@ -1,4 +1,4 @@
 CREATE TABLE accidentRules (
-   id SERIAL PRIMARY KEY,
-   name TEXT
+   accidentRule_id SERIAL PRIMARY KEY,
+   accidentRule_name TEXT
 );

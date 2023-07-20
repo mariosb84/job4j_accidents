@@ -1,4 +1,4 @@
 CREATE TABLE accidentTypes (
-   id SERIAL PRIMARY KEY,
-   name TEXT
+   accidentType_id SERIAL PRIMARY KEY,
+   accidentType_name TEXT
 );
