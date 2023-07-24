@@ -3,14 +3,12 @@ package ru.job4j.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
-import org.thymeleaf.util.StringUtils;
 import ru.job4j.model.Accident;
 import ru.job4j.model.AccidentType;
 import ru.job4j.model.Rule;
@@ -18,8 +16,6 @@ import ru.job4j.model.Rule;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-
-import static java.util.Objects.isNull;
 
 @Repository
 @AllArgsConstructor
@@ -30,7 +26,8 @@ public class AccidentJdbcTemplate implements AccidentMem {
 
     @Override
     public List<Accident> findAll() {
-        return jdbc.query("SELECT a.accident_id,"
+        return jdbc.query(
+                "SELECT a.accident_id,"
                         + " a.accident_name,"
                         + " a.accident_text,"
                         + " a.accident_address,"
@@ -39,36 +36,39 @@ public class AccidentJdbcTemplate implements AccidentMem {
                         + " r.accidentRule_id,"
                         + " r.accidentRule_name "
                         + "FROM accidents a "
-                + "JOIN accidentTypes t ON t.accidentType_id = a.accidentTypes_id "
-                + "JOIN accidentRules r ON r.accidentRule_id = a.rules_id",
+                        + "JOIN accidentTypes t ON t.accidentType_id = a.accidentTypes_id "
+                        + "JOIN accidentRules r ON r.accidentRule_id IN (SELECT rules_id FROM link WHERE accidentLink_id = a.accident_id) "
+                        + "GROUP BY a.accident_id, a.accident_name, a.accident_text, a.accident_address, t.accidentType_id, t.accidentType_name,"
+                        + " r.accidentRule_id , r.accidentRule_name ORDER BY a.accident_id",
                 new AccidentResultSetExtractor()
-                );
+        );
     }
 
-   @Override
-   public Accident add(Accident accident) {
-       String sql = "INSERT INTO accidents ("
-               + " accident_name,"
-               + " accident_text,"
-               + " accident_address,"
-               + " accidentTypes_id,"
-               + " rules_id) "
-               + "VALUES (:accident_name, :accident_text, :accident_address, :accidentTypes_id, "
-               + "(SELECT accidentRule_id FROM accidentRules WHERE accidentRule_name = :rule_name))";
-       List<MapSqlParameterSource> batchParams = new ArrayList<>();
-       Set<Rule> rules = accident.getRules();
-       for (Rule rule : rules) {
-           MapSqlParameterSource params = new MapSqlParameterSource()
-                   .addValue("accident_name", accident.getName())
-                   .addValue("accident_text", accident.getText())
-                   .addValue("accident_address", accident.getAddress())
-                   .addValue("accidentTypes_id", accident.getType().getId())
-                   .addValue("rule_name", rule.getName());
-           batchParams.add(params);
-       }
-       jdbc.batchUpdate(sql, batchParams.toArray(new SqlParameterSource[0]));
-       return accident;
-   }
+    @Override
+    public Accident add(Accident accident) {
+        String sql = "INSERT INTO accidents (accident_name, accident_text, accident_address, accidentTypes_id) "
+                + "VALUES (:accident_name, :accident_text, :accident_address, :accidentTypes_id)";
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("accident_name", accident.getName())
+                .addValue("accident_text", accident.getText())
+                .addValue("accident_address", accident.getAddress())
+                .addValue("accidentTypes_id", accident.getType().getId());
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbc.update(sql, params, keyHolder);
+        Map<String, Object> keys = keyHolder.getKeys();
+        assert keys != null;
+        int accidentId = (int) keys.get("accident_id");
+        accident.setId(accidentId);
+        String sqlLink = "INSERT INTO link (rules_id, accidentLink_id) VALUES (:rule_id, :accident_id)";
+        Set<Rule> rules = accident.getRules();
+        for (Rule rule : rules) {
+            MapSqlParameterSource linkParams = new MapSqlParameterSource()
+                    .addValue("accident_id", accidentId)
+                    .addValue("rule_id", rule.getId());
+            jdbc.update(sqlLink, linkParams);
+        }
+        return accident;
+    }
 
     @Override
     public boolean update(Accident accident, int id) {
@@ -76,8 +76,7 @@ public class AccidentJdbcTemplate implements AccidentMem {
                 + "accident_name = :accident_name, "
                 + "accident_text = :accident_text, "
                 + "accident_address = :accident_address, "
-                + "accidentTypes_id = :accidentTypes_id, "
-                + "rules_id = :accidentRules_id "
+                + "accidentTypes_id = :accidentTypes_id "
                 + "WHERE accident_id = :accident_id";
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("accident_name", accident.getName());
@@ -85,15 +84,16 @@ public class AccidentJdbcTemplate implements AccidentMem {
         params.addValue("accident_address", accident.getAddress());
         params.addValue("accidentTypes_id", accident.getType().getId());
         params.addValue("accident_id", id);
-        List<Integer> ruleIds = new ArrayList<>();
-        for (Rule rule : accident.getRules()) {
-            ruleIds.add(rule.getId());
+        String sqlLink = "UPDATE link SET rules_id = :rule_id, accidentLink_id = :accident_id "
+        + "WHERE accidentLink_id  = :accident_id";
+        Set<Rule> rules = accident.getRules();
+        for (Rule rule : rules) {
+            MapSqlParameterSource linkParams = new MapSqlParameterSource()
+                    .addValue("rule_id", rule.getId())
+                    .addValue("accident_id", id);
+            jdbc.update(sqlLink, linkParams);
         }
-        String ruleIdsString = StringUtils.join(ruleIds, ",");
-        int accidentRulesId = Integer.parseInt(ruleIdsString);
-        params.addValue("accidentRules_id", accidentRulesId);
-
-        return jdbc.update(sql, params) > 0;
+        return (jdbc.update(sql, params)) > 0;
     }
 
 
@@ -110,15 +110,9 @@ public class AccidentJdbcTemplate implements AccidentMem {
                 + " r.accidentRule_name "
                 + "FROM accidents a "
                 + "JOIN accidentTypes t ON t.accidentType_id = a.accidentTypes_id "
-                + "JOIN accidentRules r ON r.accidentRule_id = a.rules_id "
+                + "JOIN accidentRules r ON r.accidentRule_id IN (SELECT rules_id FROM link WHERE accidentLink_id = a.accident_id) "
                 + "WHERE a.accident_id = :id";
-        try {
-            Accident accident = jdbc.queryForObject(sql, params, new AccidentMapper());
-            assert accident != null;
-            return Optional.of(accident);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
+       return (Objects.requireNonNull(jdbc.query(sql, params, new AccidentResultSetExtractor()))).stream().findAny();
     }
 
     @Override
@@ -134,8 +128,8 @@ public class AccidentJdbcTemplate implements AccidentMem {
                 + " r.accidentRule_name "
                 + "FROM accidents a "
                 + "JOIN accidentTypes t ON t.accidentType_id = a.accidentTypes_id "
-                + "JOIN accidentRules r ON r.accidentRule_id = a.rules_id "
-                + "WHERE a.accident_name LIKE :id",
+                + "JOIN accidentRules r ON r.accidentRule_id IN (SELECT rules_id FROM link WHERE accidentLink_id = a.accident_id)"
+                + "WHERE a.accident_name LIKE :key",
                 params, new AccidentResultSetExtractor()
         );
 
@@ -170,32 +164,28 @@ public class AccidentJdbcTemplate implements AccidentMem {
 
     public static class AccidentResultSetExtractor implements ResultSetExtractor<List<Accident>> {
 
-        @Override
-        public List<Accident> extractData(ResultSet rs) throws SQLException, DataAccessException {
-            Map<Long, Accident> accidentMap = new HashMap<>();
-            while (rs.next()) {
-                long accidentId = rs.getLong("accident_id");
-                long typeId = rs.getLong("accidentType_id");
-                String typeName = rs.getString("accidentType_name");
-                long ruleId = rs.getLong("accidentRule_id");
-                String ruleName = rs.getString("accidentRule_name");
-               var accident = accidentMap.get(accidentId);
-        if (isNull(accident)) {
-             accident = new Accident(
-                    (int) accidentId,
-                    rs.getString("accident_name"),
-                    rs.getString("accident_text"),
-                    rs.getString("accident_address"),
-                    new AccidentType((int) typeId, typeName),
-                    new HashSet<>()
-            );
-                accidentMap.put(accidentId, accident);
-                }
-                accident.getRules().add(new Rule((int) ruleId, ruleName));
-
-            }
-               return new ArrayList<>(accidentMap.values());
-        }
+       @Override
+       public List<Accident> extractData(ResultSet rs) throws SQLException, DataAccessException {
+           Map<Integer, Accident> result = new HashMap<>();
+           while (rs.next()) {
+                Accident accident = new Accident(
+                       (int) rs.getLong("accident_id"),
+                       rs.getString("accident_name"),
+                       rs.getString("accident_text"),
+                       rs.getString("accident_address"),
+                       new AccidentType(
+                               rs.getInt("accidentType_id"),
+                               rs.getString("accidentType_name")
+                       ),
+                       new HashSet<>()
+               );
+               result.putIfAbsent(accident.getId(), accident);
+               result.get(accident.getId()).getRules().add(
+                       new Rule(rs.getInt("accidentRule_id"),
+                               rs.getString("accidentRule_name")));
+           }
+           return new ArrayList<>(result.values());
+       }
 
 
     }
