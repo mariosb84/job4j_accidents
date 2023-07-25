@@ -84,13 +84,16 @@ public class AccidentJdbcTemplate implements AccidentMem {
         params.addValue("accident_address", accident.getAddress());
         params.addValue("accidentTypes_id", accident.getType().getId());
         params.addValue("accident_id", id);
-        String sqlLink = "UPDATE link SET rules_id = :rule_id, accidentLink_id = :accident_id "
-        + "WHERE accidentLink_id  = :accident_id";
+        String deleteLink = "DELETE FROM link WHERE accidentLink_id  = :accident_id";
+            MapSqlParameterSource linkDelParams = new MapSqlParameterSource()
+                    .addValue("accident_id", id);
+            jdbc.update(deleteLink, linkDelParams);
+        String sqlLink = "INSERT INTO link (rules_id, accidentLink_id) VALUES (:rules_id, :accidentLink_id)";
         Set<Rule> rules = accident.getRules();
         for (Rule rule : rules) {
             MapSqlParameterSource linkParams = new MapSqlParameterSource()
-                    .addValue("rule_id", rule.getId())
-                    .addValue("accident_id", id);
+                    .addValue("accidentLink_id", id)
+                    .addValue("rules_id", rule.getId());
             jdbc.update(sqlLink, linkParams);
         }
         return (jdbc.update(sql, params)) > 0;
@@ -139,7 +142,7 @@ public class AccidentJdbcTemplate implements AccidentMem {
     public boolean delete(int id) {
         Map<String, Object> params = Collections.singletonMap("id", id);
         return jdbc.update(
-                "delete from accidents where id = :id", params
+                "DELETE FROM accidents WHERE id = :id", params
         ) > 0;
     }
 
