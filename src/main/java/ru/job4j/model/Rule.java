@@ -10,18 +10,15 @@ import javax.persistence.*;
 @Table(name = "accidentRules")
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 public class Rule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    @NonNull
-    @Setter
-    @Getter
     @Column(name = "accidentRule_id")
     private int id;
     @NonNull
-    @Setter
-    @Getter
     @Column(name = "accidentRule_name")
     private String name;
 }
