@@ -1,47 +1,49 @@
 package ru.job4j.service;
 
 import lombok.AllArgsConstructor;
-/*import org.springframework.stereotype.Service;*/
+import org.springframework.stereotype.Service;
 import ru.job4j.model.AccidentType;
-import ru.job4j.repository.AccidentTypeHibernate;
+import ru.job4j.repository.AccidentTypeRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-/*@Service*/
+@Service
 @AllArgsConstructor
-public class HbmAccidentTypeService implements AccidentTypeService {
+public class AccidentTypeDataService implements AccidentTypeService {
 
-    private final AccidentTypeHibernate accidentTypesStore;
+    private final AccidentTypeRepository accidentTypeRepository;
 
     @Override
     public List<AccidentType> findAll() {
-        return accidentTypesStore.findAll();
+        return (List<AccidentType>) accidentTypeRepository.findAll();
     }
 
     @Override
     public AccidentType add(AccidentType accidentType) {
-        return accidentTypesStore.add(accidentType);
+        return accidentTypeRepository.save(accidentType);
     }
 
     @Override
     public boolean update(AccidentType accidentType, int id) {
-        return accidentTypesStore.update(accidentType, id);
+        accidentTypeRepository.save(accidentType);
+        return true;
     }
 
     @Override
     public Optional<AccidentType> findById(int id) {
-        return accidentTypesStore.findById(id);
+        return accidentTypeRepository.findById(id);
     }
 
     @Override
     public List<AccidentType> findByName(String key) {
-        return accidentTypesStore.findByName(key);
+        return null;
     }
 
     @Override
     public boolean delete(int id) {
-        return accidentTypesStore.delete(id);
+       accidentTypeRepository.deleteById(id);
+       return true;
     }
 
 }

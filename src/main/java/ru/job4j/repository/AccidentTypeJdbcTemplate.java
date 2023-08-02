@@ -1,7 +1,7 @@
 package ru.job4j.repository;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
+/*import org.springframework.context.annotation.Primary;*/
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
-@Primary
+/*@Primary*/
 public class AccidentTypeJdbcTemplate implements AccidentTypeMem {
 
     private final NamedParameterJdbcOperations jdbc;

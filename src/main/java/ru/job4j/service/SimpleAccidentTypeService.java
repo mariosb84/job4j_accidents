@@ -2,7 +2,7 @@ package ru.job4j.service;
 
 import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
-import org.springframework.stereotype.Service;
+/*import org.springframework.stereotype.Service;*/
 import ru.job4j.model.AccidentType;
 import ru.job4j.repository.AccidentTypeMem;
 
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ThreadSafe
-@Service
+/*@Service*/
 @AllArgsConstructor
 public class SimpleAccidentTypeService implements AccidentTypeService {
 

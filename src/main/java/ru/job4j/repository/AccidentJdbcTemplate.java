@@ -1,7 +1,7 @@
 package ru.job4j.repository;
 
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Primary;
+/*import org.springframework.context.annotation.Primary;*/
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,7 +19,7 @@ import java.util.*;
 
 @Repository
 @AllArgsConstructor
-@Primary
+/*@Primary*/
 public class AccidentJdbcTemplate implements AccidentMem {
 
     private final NamedParameterJdbcOperations jdbc;

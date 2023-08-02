@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.model.Accident;
 import ru.job4j.service.*;
-/*import ru.job4j.service.AccidentService;*/
 
 import java.util.List;
 
@@ -17,9 +16,9 @@ import java.util.List;
 @RequestMapping("/tasks")
 public class AccidentController {
 
-    private final /*AccidentService*/ HbmAccidentService accidents;
-    private final /*AccidentTypeService*/ HbmAccidentTypeService accidentTypes;
-    private final /*AccidentRuleService*/ HbmAccidentRuleService accidentRules;
+    private final AccidentDataService accidents;
+    private final AccidentTypeDataService accidentTypes;
+    private final AccidentRuleDataService accidentRules;
 
     @GetMapping("/createAccident")
     public String viewCreateAccident(Model model) {

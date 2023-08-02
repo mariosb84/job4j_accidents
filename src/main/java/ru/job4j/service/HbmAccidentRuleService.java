@@ -1,7 +1,7 @@
 package ru.job4j.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+/*import org.springframework.stereotype.Service;*/
 import ru.job4j.model.Rule;
 import ru.job4j.repository.AccidentRulesHibernate;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Service
+/*@Service*/
 @AllArgsConstructor
 public class HbmAccidentRuleService implements AccidentRuleService {
 
