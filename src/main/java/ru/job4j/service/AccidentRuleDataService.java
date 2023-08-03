@@ -15,7 +15,7 @@ public class AccidentRuleDataService implements AccidentRuleService {
 
     @Override
     public List<Rule> findAll() {
-        return (List<Rule>) accidentRulesRepository.findAll();
+        return accidentRulesRepository.findAll();
     }
 
     @Override

@@ -16,7 +16,7 @@ public class AccidentTypeDataService implements AccidentTypeService {
 
     @Override
     public List<AccidentType> findAll() {
-        return (List<AccidentType>) accidentTypeRepository.findAll();
+        return accidentTypeRepository.findAll();
     }
 
     @Override

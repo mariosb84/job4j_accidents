@@ -20,7 +20,7 @@ public class AccidentDataService implements AccidentService {
 
     @Override
     public List<Accident> findAll() {
-        return (List<Accident>) accidentRepository.findAll();
+        return accidentRepository.findAll();
     }
 
     @Override
