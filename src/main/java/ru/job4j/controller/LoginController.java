@@ -2,6 +2,9 @@ package ru.job4j.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import lombok.AllArgsConstructor;
+import net.jcip.annotations.ThreadSafe;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -12,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@ThreadSafe
 @Controller
+@AllArgsConstructor
+@RequestMapping("/security")
 public class LoginController {
 
     @GetMapping("/login")
@@ -27,7 +33,7 @@ public class LoginController {
             errorMessage = "You have been successfully logged out !!";
         }
         model.addAttribute("errorMessage", errorMessage);
-        return "login";
+        return "/security/login";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -36,7 +42,7 @@ public class LoginController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout=true";
+        return "redirect:/security/login?logout=true";
     }
 
 }
