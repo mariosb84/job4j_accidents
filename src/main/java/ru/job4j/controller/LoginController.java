@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @ThreadSafe
 @Controller
 @AllArgsConstructor
-@RequestMapping("/security")
 public class LoginController {
 
-    @GetMapping("/login")
+    @GetMapping("/security/login")
     public String loginPage(@RequestParam(value = "error", required = false) String error,
                             @RequestParam(value = "logout", required = false) String logout,
                             Model model) {
