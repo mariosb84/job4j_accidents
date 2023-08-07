@@ -32,7 +32,7 @@ public class LoginController {
             errorMessage = "You have been successfully logged out !!";
         }
         model.addAttribute("errorMessage", errorMessage);
-        return "/security/login";
+        return "/securityLogin/login";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -41,7 +41,7 @@ public class LoginController {
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/security/login?logout=true";
+        return "redirect:/securityLogin/login?logout=true";
     }
 
 }
