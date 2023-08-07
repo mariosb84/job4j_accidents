@@ -19,8 +19,8 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index(Model model) {
-        model.addAttribute("user", "Petr Arsentev");
-       /* model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());*/
+       /* model.addAttribute("user", "Petr Arsentev");*/
+        model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         model.addAttribute("accidents", accidentService.findAll());
         return "/tasks/index";
     }

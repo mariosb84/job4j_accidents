@@ -18,10 +18,10 @@ import javax.sql.DataSource;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /*@Autowired
     PasswordEncoder passwordEncoder;*/
-   /* @Autowired
-    DataSource ds;*/
+    @Autowired
+    DataSource ds;
 
-   @Override
+  /* @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder passwordEncoder = passwordEncoder();
         auth.inMemoryAuthentication()
@@ -29,15 +29,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("user").password(passwordEncoder.encode("123456")).roles("USER")
                 .and()
                 .withUser("admin").password(passwordEncoder.encode("123456")).roles("USER", "ADMIN");
-    }
-    /*@Override
+    }*/
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(ds)
                 .withUser(User.withUsername("user")
                         .password(passwordEncoder().encode("123456"))
                         .roles("USER"));
-    }*/
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
