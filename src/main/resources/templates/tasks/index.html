@@ -69,8 +69,17 @@
             </div>
         </div>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup2">
+            <a class="nav-item nav-link" th:if="${user.username == 'Гость'}" th:href="@{/login}">
+                <span th:text="${user.username}"></span>
+                <span> | Войти</span>
+            </a>
+            <a class="nav-item nav-link" th:if="${user.username != 'Гость'}" th:href="@{/logout}">
+                <span th:text="${user.username}"></span>
+                <span> | Выйти</span>
+            </a>
             <div class="navbar-nav">
                     <span> Пользователь :_______</span><span th:text="${user.username}"></span>
+        </div>
         </div>
     </nav>
     <div class="mb-3 row">
