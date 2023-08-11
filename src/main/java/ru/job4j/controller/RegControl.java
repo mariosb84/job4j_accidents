@@ -2,6 +2,7 @@ package ru.job4j.controller;
 
 import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,10 +29,16 @@ public class RegControl {
         user.setPassword(encoder.encode(user.getPassword()));
         user.setAuthority(authorities.findByAuthority("ROLE_USER"));
         /*users.save(user);*/
-        if (!users.findByNameUsers(user.getUsername()).isEmpty()) {
+        /*if (!users.findByNameUsers(user.getUsername()).isEmpty()) {
             return "redirect:/reg?fail=true";
         }
-        users.save(user);
+        users.save(user);*/
+        try {
+            users.save(user);
+        } catch (ConstraintViolationException e) {
+            /*return "redirect:/reg?fail=true";*/
+            return "redirect:/reg";
+        }
         return "redirect:/reg?success=true";
     }
 
