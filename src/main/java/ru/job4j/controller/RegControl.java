@@ -36,8 +36,8 @@ public class RegControl {
         try {
             users.save(user);
         } catch (ConstraintViolationException e) {
-            /*return "redirect:/reg?fail=true";*/
-            return "redirect:/reg";
+            return "redirect:/reg?fail=true";
+            /*return "redirect:/reg";*/
         }
         return "redirect:/reg?success=true";
     }
