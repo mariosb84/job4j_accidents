@@ -1,6 +1,7 @@
 package ru.job4j.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.job4j.model.User;
 import ru.job4j.repository.UserRepository;
@@ -15,8 +16,14 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void save(User user) {
-        userRepository.save(user);
+    public Optional<User> save(User user) {
+        Optional<User> result = Optional.of(user);
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            return Optional.empty();
+        }
+        return result;
     }
 
     public Optional<User> findById(User user) {

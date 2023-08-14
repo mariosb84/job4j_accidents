@@ -15,7 +15,7 @@ public class IndexController {
 
     private final AccidentDataService accidentService;
 
-   @GetMapping("/**")
+   @GetMapping("/")
     public String index(Model model) {
        /* model.addAttribute("user", "Petr Arsentev");*/
         model.addAttribute("user", SecurityContextHolder.getContext().getAuthentication().getPrincipal());

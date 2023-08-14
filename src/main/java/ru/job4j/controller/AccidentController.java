@@ -31,7 +31,7 @@ public class AccidentController {
     @PostMapping("/saveAccident")
     public String save(@ModelAttribute Accident accident, @RequestParam("rIds") List<Integer> rulesIds) {
         accidents.add(accident, rulesIds);
-        return "redirect:/tasks/index";
+        return "redirect:/";
     }
 
     @GetMapping("/editAccident/{id}")
@@ -54,7 +54,7 @@ public class AccidentController {
             model.addAttribute("message", "Задание с указанным идентификатором не найдено");
             return "errors/error404";
         }
-        return "redirect:/tasks/index";
+        return "redirect:/";
     }
 
 }
