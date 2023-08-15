@@ -21,6 +21,9 @@ public class UserService {
         try {
             userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
+            System.out.println("Дублирование имени !!!");
+        }
+        if (findById(user).isEmpty()) {
             return Optional.empty();
         }
         return result;
