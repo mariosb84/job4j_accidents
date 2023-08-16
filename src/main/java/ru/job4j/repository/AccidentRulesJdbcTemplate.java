@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 /*import org.springframework.context.annotation.Primary;*/
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.stereotype.Repository;
+/*import org.springframework.stereotype.Repository;*/
 import ru.job4j.model.Rule;
 
 import java.util.*;
 
-@Repository
+/*@Repository*/
 @AllArgsConstructor
 /*@Primary*/
 public class AccidentRulesJdbcTemplate implements AccidentRulesMem {

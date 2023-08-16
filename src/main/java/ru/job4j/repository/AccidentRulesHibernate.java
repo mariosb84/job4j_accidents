@@ -1,12 +1,12 @@
 package ru.job4j.repository;
 
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
+/*import org.springframework.stereotype.Repository;*/
 import ru.job4j.model.Rule;
 
 import java.util.*;
 
-@Repository
+/*@Repository*/
 @AllArgsConstructor
 public class AccidentRulesHibernate implements AccidentRulesMem {
 
