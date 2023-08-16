@@ -28,7 +28,7 @@ public class AccidentControllerTest {
                 .andExpect(view().name("/tasks/createAccident"));
     }
 
-   /*  ЭТОТ ТЕСТ НЕ ПРОХОДИТ :
+ /*    ЭТОТ ТЕСТ НЕ ПРОХОДИТ :
 
    @Test
     @WithMockUser

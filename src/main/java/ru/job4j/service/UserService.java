@@ -1,6 +1,7 @@
 package ru.job4j.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.job4j.model.User;
@@ -12,21 +13,19 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
 
     public Optional<User> save(User user) {
-        Optional<User> result = Optional.of(user);
         try {
             userRepository.save(user);
+            return Optional.of(user);
         } catch (DataIntegrityViolationException e) {
-            System.out.println("Дублирование имени !!!");
+            log.error(e.getMessage(), e);
         }
-        if (findById(user).isEmpty()) {
             return Optional.empty();
-        }
-        return result;
     }
 
     public Optional<User> findById(User user) {
