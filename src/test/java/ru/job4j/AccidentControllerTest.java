@@ -30,7 +30,7 @@ public class AccidentControllerTest {
 
      /*ЭТОТ ТЕСТ НЕ ПРОХОДИТ :*/
 
- /*  @Test
+  /* @Test
     @WithMockUser
     public void shouldReturnViewEditAccident() throws Exception {
         this.mockMvcAccident.perform(get("/tasks/editAccident/{id}"))
