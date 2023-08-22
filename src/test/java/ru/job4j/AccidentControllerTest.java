@@ -58,7 +58,7 @@ public class AccidentControllerTest {
     void whenPostSaveAccidentThenShouldReturnIndexPage() throws Exception {
         var rIds = List.of(1, 2, 3);
         var accident = new Accident(0, "Name", "Text", "Address",
-                new AccidentType(1,"Empty"), Collections.emptySet());
+                new AccidentType(1, "Empty"), Collections.emptySet());
         this.mockMvcAccident.perform(post("/tasks/saveAccident")
                 .param("name", "Name")
                 .param("text", "Text")
@@ -86,7 +86,7 @@ public class AccidentControllerTest {
     void whenPostEditAccidentThenShouldReturnRedirectIndexPageAndArgumentCaptureEquals() throws Exception {
         var rIds = List.of(1, 2, 3);
         var accident = new Accident(0, "Name", "Text", "Address",
-                new AccidentType(1,"Empty"), Collections.emptySet());
+                new AccidentType(1, "Empty"), Collections.emptySet());
         when(accidents.update(accident, accident.getId(), rIds)).thenReturn(true);
         this.mockMvcAccident.perform(post("/tasks/updateAccident")
                 .param("id", "0")
